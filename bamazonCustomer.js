@@ -11,8 +11,24 @@ var connect = mysql.createConnection({
 
 
 connect.query("Select * FROM products", function(err,res){
-    	console.log("\nProduct List\n")
+    	console.log("\n Current Product List\n")
     for(var i=0; i <res.length; i++){
-    	console.log(res[i].item_id + " | "  + res[i].product_name + " | " + res[i].department_name +  " | " + res[i].price + " | " + res[i].stock_qty);
-    }
+    	console.log("Product ID: " + res[i].item_id + " | " 
+			    	 +"Product Name: " + res[i].product_name + " | " 
+			    	 + "Dept: " + res[i].department_name +  " | " 
+			    	 + "Price: " + res[i].price + " | " 
+			    	 + "Qty: " +res[i].stock_qty);
+    };
+    search();
 });
+
+
+var search = function() {
+	inquirer.prompt({
+		name: "product_Id",
+		type: "input",
+		message: "What is the Product ID you would like to bid on? ",
+	}).then(function(answer){
+			console.log("You input Product ID: " + answer.product_Id);
+		});
+	};
