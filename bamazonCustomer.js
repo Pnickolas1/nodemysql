@@ -24,7 +24,7 @@ connect.query("Select * FROM products", function(err, res) {
 
 
 var selection = function() {
-    inquirer.prompt({
+    inquirer.prompt([{
         name: "product_Id",
         type: "input",
         message: "What is the Product ID you would like to bid on? ",
@@ -44,7 +44,7 @@ var selection = function() {
             }
             return false;
         }
-    }).then(function(answer) {
+    }]).then(function(answer) {
         console.log("You input Product ID: " + answer.product_Id);
     });
 };
