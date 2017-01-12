@@ -13,7 +13,7 @@ var connect = mysql.createConnection({
 connect.query("Select * FROM products", function(err, res) {
     console.log("\n Current Product List\n")
     for (var i = 0; i < res.length; i++) {
-        console.log("Product ID: " + res[i].item_id + " | " +
+        console.log("Item ID: " + res[i].item_id + " | " +
             "Product Name: " + res[i].product_name + " | " +
             "Dept: " + res[i].department_name + " | " +
             "Price: " + res[i].price + " | " +
@@ -27,7 +27,7 @@ var selection = function() {
     inquirer.prompt([{
         name: "product_Id",
         type: "input",
-        message: "What is the Product ID you would like to bid on? ",
+        message: "What is the Item ID you would like to bid on? ",
         validate: function(value) {
             if (isNaN(value) === false) {
                 return true;
@@ -45,7 +45,16 @@ var selection = function() {
             return false;
         }
     }]).then(function(answer) {
-        var query = "SELECT * FROM products where product_Id ? ";
-        connect.query(query, [answer.start, answer.end])
+        var query = "SELECT * FROM products where item_id ? ";
+        connect.query(query, [answer.start, answer.end]), function (err,res) {
+            for(var q= 0; q < res.length;q++){
+                console.log("Item ID: " + res[i].item_id + " | " +
+            "Product Name: " + res[i].product_name + " | " +
+            "Dept: " + res[i].department_name + " | " +
+            "Price: " + res[i].price + " | " +
+            "Qty: " + res[i].stock_qty);
+            }
+                selection();
+        }
     });
 };
