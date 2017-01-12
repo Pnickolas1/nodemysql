@@ -45,6 +45,7 @@ var selection = function() {
             return false;
         }
     }]).then(function(answer) {
-        console.log("You input Product ID: " + answer.product_Id);
+        var query = "SELECT * FROM products where product_Id ? ";
+        connect.query(query, [answer.start, answer.end])
     });
 };
