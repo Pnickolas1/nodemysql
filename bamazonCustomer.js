@@ -33,8 +33,8 @@ var selection = function() {
                 return true;
             }
             return false;
-            }
-        }, {
+        }
+    }, {
         name: "qty",
         type: "input",
         message: "How many would you like to purchase? ",
@@ -45,16 +45,29 @@ var selection = function() {
             return false;
         }
     }]).then(function(answer) {
-        var query = "SELECT * FROM products where item_id = ? ";
-        connect.query(query, [answer.start, answer.end], function (err,res) {
-            for(var q= 0; q < res.length;q++){
-                console.log("Item ID: " + res[q].item_id + " | " +
-            "Product Name: " + res[q].product_name + " | " +
-            "Dept: " + res[q].department_name + " | " +
-            "Price: " + res[q].price + " | " +
-            "Qty: " + res[q].stock_qty);
-            }
-             selection();
-        });
-    });
+        return new Promise(function(success,failure) {
+            var query = "SELECT * FROM products where item_id = ? ";
+            connect.query(query, [answer.product_Id], function(err, res) {
+                if(err){
+                    failure(err);
+                } 
+                else {
+                    success(res[0])
+                }
+                // for (var q = 0; q < res.length; q++) {
+                //     console.log("Item ID: " + res[q].item_id + " | " +
+                //         "Product Name: " + res[q].product_name + " | " +
+                //         "Dept: " + res[q].department_name + " | " +
+                //         "Price: " + res[q].price + " | " +
+                //         "Qty: " + res[q].stock_qty);
+                // }
+                // selection();
+            });
+        }).then(function(res){
+            return new Promise(function(succes,failure){
+                var query = ""
+            })
+        })
+
+    })
 };
