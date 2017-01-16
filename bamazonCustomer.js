@@ -55,8 +55,8 @@ function productSold (product,quantity){
     });
 }
 
-function updateStock(item_id,stock_qty, product_sales){
-    return queryDatabase("UPDATE products SET stock_qty = ?, product_sales = ? where item_id = ?", [stock_qty,product_sales,item_id]);
+function updateStock(item_id, product_sales){
+    return queryDatabase('UPDATE products SET product_sales = ? WHERE item_id = ?', [product_sales, item_id]);
 }
 
 function getQty(product) {
