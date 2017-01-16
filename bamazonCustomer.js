@@ -10,9 +10,9 @@ var connection = mysql.createConnection({
     database: 'bamazon'
 });
 
-connectToDb().then(function () {
+connectToDb().then(function() {
     console.log("You\'re connected with thread id: " + connection.threadId);
-    return orderWorkflow().then(function (){
+    return orderWorkflow().then(function() {
         return orderComplete();
     });
 });
@@ -25,28 +25,28 @@ function productChoices(products) {
     return getOrderId(products).then(selectOrder);
 }
 
-function selectOrder(product){
-    return inputQty(product).then(function (quantity) {
+function selectOrder(product) {
+    return inputQty(product).then(function(quantity) {
         return productSold(product, quantity);
     });
 }
 
-function inputQty(product){
-    return getQty(product).then(function (quantity) {
+function inputQty(product) {
+    return getQty(product).then(function(quantity) {
         console.log(product);
-        if(product.stock_qty >= quantity) {
-            return + quantity;
+        if (product.stock_qty >= quantity) {
+            return +quantity;
         } else {
             throw product;
         }
     });
 }
 
-function productSold (product,quantity){
+function productSold(product, quantity) {
     var id = product.item_id;
     var db_qty = product.stock_qty;
     var items_sold = product.product_sales;
-    return updateStock(id, db_qty, items_sold).then(function (){
+    return updateStock(id, db_qty, items_sold).then(function() {
         confirmOrder({
             quantity: quantity,
             price: product.price,
@@ -55,7 +55,7 @@ function productSold (product,quantity){
     });
 }
 
-function updateStock(item_id, product_sales){
+function updateStock(item_id, product_sales) {
     return queryDatabase('UPDATE products SET product_sales = ? WHERE item_id = ?', [product_sales, item_id]);
 }
 
@@ -64,19 +64,19 @@ function getQty(product) {
         type: "input",
         name: "quantity",
         message: "How many would " + product.product_name + "(s) would you like to purchase? "
-    }]).then(function (answers){
+    }]).then(function(answers) {
         console.log(answers);
         return parseInt(answers.quantity, 10);
     });
 }
 
-function getOrderId(products){
+function getOrderId(products) {
     return inquirer.prompt([{
         type: 'input',
         name: 'item_id',
         message: 'Enter the item_id you would like to purchase: '
-    }]).then(function(answers){
-        return products.find(function (item){
+    }]).then(function(answers) {
+        return products.find(function(item) {
             console.log(item.item_id);
             return item.item_id == answers.item_id;
         });
@@ -87,8 +87,8 @@ function totalInventory() {
     return queryDatabase('SELECT * FROM products');
 }
 
-function inventory () {
-    return totalInventory().then(function (products){
+function inventory() {
+    return totalInventory().then(function(products) {
         console.table(products);
         return products;
     });
@@ -103,8 +103,8 @@ function orderComplete() {
 }
 
 function queryDatabase(string, data) {
-    return new Promise(function (success, failure) {
-        connection.query(string, data, function (err, response) {
+    return new Promise(function(success, failure) {
+        connection.query(string, data, function(err, response) {
             if (err) {
                 failure(err);
                 console.log(err);
@@ -118,8 +118,8 @@ function queryDatabase(string, data) {
 
 
 function connectionMethod(method) {
-    return new Promise(function (success, failure) {
-        connection[method](function (err, result) {
+    return new Promise(function(success, failure) {
+        connection[method](function(err, result) {
             if (err) {
                 failure(err);
             } else {
@@ -135,43 +135,3 @@ function confirmOrder(result) {
     console.log('You purchased ' + quantity + ' ' + result.name + '(s) for $' + (quantity * result.price));
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
